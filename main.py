@@ -5,12 +5,14 @@ from sr.config import *
 from sr.feature_extractor import FeatureExtractor
 from sr.model import VoiceModel
 from sr.realtime_classifier import RealtimeClassifier, AudioConfig
-from types import FeatureData
+from sr.types_sr import FeatureData
 
 class VoiceRecognitionSystem:
     def __init__(self) -> None:
         self.feature_extractor = FeatureExtractor()
         self.model: Optional[VoiceModel] = None
+        self.features_array: Optional[np.ndarray] = None
+        self.labels_array: Optional[np.ndarray] = None
         
     def load_training_data(self) -> Tuple[List[FeatureData], List[int]]:
         features: List[FeatureData] = []
@@ -32,18 +34,33 @@ class VoiceRecognitionSystem:
                 
         return features, labels
 
+    def prepare_training_data(self) -> None:
+        try:
+            features, labels = self.load_training_data()
+            
+            if not features:
+                raise ValueError("No training data available")
+                
+            self.features_array = np.array(features)
+            self.labels_array = np.array(labels)
+            
+        except Exception as e:
+            print(f"Error preparing training data: {e}")
+            raise
+
     def initialize_model(self) -> None:
         if os.path.exists(MODEL_PATH):
             print("Loading existing model...")
             self.model = VoiceModel.load(MODEL_PATH)
         else:
             print("Training new model...")
-            features, labels = self.load_training_data()
-            features_array = np.array(features)
-            labels_array = np.array(labels)
+            self.prepare_training_data()
             
-            self.model = VoiceModel(features_array.shape[1])
-            self.model.train(features_array, labels_array)
+            if self.features_array is None or len(self.features_array.shape) < 2:
+                raise ValueError("Features array is not properly initialized")
+            
+            self.model = VoiceModel(self.features_array.shape[1])
+            self.model.train(self.features_array, self.labels_array)
             self.model.save(MODEL_PATH)
 
     def run(self) -> None:
@@ -71,8 +88,11 @@ def main() -> None:
     os.makedirs(OTHER_VOICE_PATH, exist_ok=True)
 
     system = VoiceRecognitionSystem()
-    system.initialize_model()
-    system.run()
+    try:
+        system.initialize_model()
+        system.run()
+    except Exception as e:
+        print(f"Error initializing system: {e}")
 
 if __name__ == "__main__":
     main()

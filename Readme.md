@@ -24,10 +24,10 @@ git clone https://github.com/OE-LUCIFER/voice-recognition-system.git
 
 # Install dependencies
 pip install -r requirements.txt
-
+cd sr
 # Create data directories
 mkdir -p data/my_voice data/other_voice
-
+cd..
 # Run the system
 python main.py
 ```
@@ -36,7 +36,6 @@ python main.py
 
 - Python 3.8+
 - Working microphone
-- 500MB disk space
 - Dependencies listed in `requirements.txt`
 
 ## 🎓 How It Works
@@ -110,12 +109,6 @@ If you use this project, please cite:
   url = {https://github.com/OE-LUCIFER/voice-recognition-system}
 }
 ```
-
-## 👤 Author
-
-**Abhay (Vortex)**
-- GitHub: [@OE-LUCIFER](https://github.com/OE-LUCIFER)
-- Role: Project Creator & Maintainer
 
 ## 🤝 Contributing
 

@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, Dropout, LSTM
-from types import ModelInterface, FeatureData, ModelPrediction
+from types_sr import ModelInterface, FeatureData, ModelPrediction
 
 class VoiceModel(ModelInterface):
     def __init__(self, input_shape: int) -> None:

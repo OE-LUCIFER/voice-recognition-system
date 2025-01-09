@@ -7,7 +7,7 @@ from queue import Queue
 from dataclasses import dataclass
 from config import SAMPLE_RATE, DURATION
 from feature_extractor import FeatureExtractor
-from types import AudioData, ModelInterface, ModelPrediction
+from types_sr import AudioData, ModelInterface, ModelPrediction
 
 @dataclass
 class AudioConfig:

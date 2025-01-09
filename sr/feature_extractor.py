@@ -2,7 +2,8 @@ from typing import Tuple
 import librosa
 import numpy as np
 from config import SAMPLE_RATE, N_MFCC
-from types import AudioData, FeatureData, AudioProcessor
+
+from types_sr import AudioProcessor, FeatureData, AudioData
 
 class FeatureExtractor(AudioProcessor):
     @staticmethod
